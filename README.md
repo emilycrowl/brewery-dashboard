@@ -1,4 +1,4 @@
-# Web Development Project 5 - *Brewery Dashboard*
+# Web Development Project 5 - *Brewery Dashboard P1*
 
 Submitted by: **Emily Crowl**
 
@@ -24,6 +24,30 @@ The following **optional** features are implemented:
 - [ ] Multiple filters can be applied simultaneously
 - [ ] Filters use different input types such as a text input, a selection, or a slider
 - [ ] The user can enter specific bounds for filter values
+
+# Web Development Project 6 - *Brewery Dashboard P2*
+
+Submitted by: **Emily Crowl**
+
+This web app: **displays different statistics about breweries in the US and visualizes the data**
+
+Time spent: **6** hours spent in total
+
+## Required Features
+
+The following **required** functionality is completed:
+
+- [X] **The app includes at least one unique chart developed using the fetched data that tell an interesting story**
+- [X] **Clicking on an item in the list view displays more details about it**
+  - [X] To ensure an accurate grade, your sidebar **must** be viewable when showing the details view in your recording.
+- [X] **Clicking on an item has a direct, unique link to that item's detail view page**
+  - [X] To ensure an accurate grade, the URL/address bar of your web browser **must** be viewable in your recording.  
+
+
+The following **optional** features are implemented:
+
+- [ ] The site's customized dashboard contains more content that explains what is interesting about the data
+- [ ] The site allows users to toggle between different data visualizations
 
 ## License
 
