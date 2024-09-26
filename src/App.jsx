@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import BreweryList from './BreweryList';
+import BreweryDetail from './BreweryDetail';
+import BreweryChart from './BreweryChart';
 
 const App = () => {
   const [breweries, setBreweries] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredBreweries, setFilteredBreweries] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // fetch the data from the OpenBreweryDB API
   useEffect(() => {
     const fetchBreweries = async () => {
       try {
         const response = await fetch('https://api.openbrewerydb.org/breweries');
         const data = await response.json();
         setBreweries(data);
-        setFilteredBreweries(data); // all data is displayed
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -21,57 +22,35 @@ const App = () => {
     fetchBreweries();
   }, []);
 
-  // search function (by name, city, or state)
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    const filtered = breweries.filter((brewery) =>
-      brewery.name.toLowerCase().includes(query) || 
-      brewery.city.toLowerCase().includes(query) || 
-      brewery.state.toLowerCase().includes(query)
-    );
-    setFilteredBreweries(filtered);
-  };
-
-  // Summary Statistics
-  const totalBreweries = breweries.length;
-  const breweriesInCalifornia = breweries.filter(
-    (brewery) => brewery.state === 'California'
-  ).length;
-  const averageBreweriesPerState = (
-    totalBreweries / new Set(breweries.map((b) => b.state)).size
-  ).toFixed(2);
+  // filter breweries based on name/city/state
+  const filteredBreweries = breweries.filter((brewery) =>
+    brewery.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    brewery.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    brewery.state.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="App">
-      <h1>Brewery Dashboard</h1>
+    <Router>
+      <div className="App">
+        <h1>Brewery Dashboard</h1>
 
-      {/* Search Bar */}
-      <input
-        type="text"
-        placeholder="Search by Name or State"
-        value={searchQuery}
-        onChange={handleSearch}
-      />
+        {/* Search input */}
+        <input
+          type="text"
+          placeholder="Search by name or state"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-      {/* Summary Statistics */}
-      <div>
-        <h2>Summary Statistics</h2>
-        <p>Total Breweries: {totalBreweries}</p>
-        <p>Breweries in California: {breweriesInCalifornia}</p>
-        <p>Average Breweries per State: {averageBreweriesPerState}</p>
+        {/* Render the BreweryChart */}
+        <BreweryChart breweries={filteredBreweries} />
+
+        <Routes>
+          <Route path="/" element={<BreweryList breweries={filteredBreweries} />} />
+          <Route path="/breweries/:id" element={<BreweryDetail breweries={filteredBreweries} />} />
+        </Routes>
       </div>
-
-      {/* Brewery List */}
-      <ul>
-        {filteredBreweries.map((brewery) => (
-          <li key={brewery.id}>
-            {brewery.name} - {brewery.city}, {brewery.state}
-          </li>
-        ))}
-      </ul>
-    </div>
+    </Router>
   );
 };
 
