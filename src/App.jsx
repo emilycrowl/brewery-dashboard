@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import BreweryList from './BreweryList';
 import BreweryDetail from './BreweryDetail';
 import BreweryChart from './BreweryChart';
+import Sidebar from './Sidebar';
 
 const App = () => {
   const [breweries, setBreweries] = useState([]);
@@ -31,24 +32,21 @@ const App = () => {
 
   return (
     <Router>
-      <div className="App">
-        <h1>Brewery Dashboard</h1>
-
-        {/* Search input */}
-        <input
-          type="text"
-          placeholder="Search by name or state"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-
-        {/* Render the BreweryChart */}
-        <BreweryChart breweries={filteredBreweries} />
-
-        <Routes>
-          <Route path="/" element={<BreweryList breweries={filteredBreweries} />} />
-          <Route path="/breweries/:id" element={<BreweryDetail breweries={filteredBreweries} />} />
-        </Routes>
+      <div className="App" style={{ display: 'flex' }}>
+        {/* Sidebar with search and navigation */}
+        <Sidebar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        
+        {/* Main content area */}
+        <div className="main-content" style={{ flex: 1, padding: '20px' }}>
+          <h1>Brewery Dashboard</h1>
+          <BreweryChart breweries={filteredBreweries} />
+          <Routes>
+            {/* Home route displaying the filtered list of breweries */}
+            <Route path="/" element={<BreweryList breweries={filteredBreweries} />} />
+            {/* Detail route displaying a single brewery */}
+            <Route path="/breweries/:id" element={<BreweryDetail breweries={filteredBreweries} />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
